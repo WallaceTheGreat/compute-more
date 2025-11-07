@@ -1,6 +1,7 @@
 ---
 import '../styles/global.css';
 import commands from '../data/commands.json';
+import computeUnits from '../data/computeUnits.json';
 ---
 
 <div id="container">
@@ -67,8 +68,8 @@ import commands from '../data/commands.json';
 	window.incrementCompute = increment;
 </script>
 
-<script define:vars={{ commands }}>
-	//let _spaceKeyDown = false;
+<script define:vars={{ commands, computeUnits }}>
+	let _spaceKeyDown = false;
 
 	document.addEventListener('DOMContentLoaded', () => {
 		const terminal = document.getElementById('terminal');
@@ -117,6 +118,18 @@ import commands from '../data/commands.json';
 					return {
 						output: ['Who are you running from ?'],
 						clear: true
+					};
+				}
+				case 'add': {
+					const adder = computeUnits.find(unit => args.includes(unit.name));
+					let output = [`Nothing called "${args}"`];
+
+					if (adder)
+						output = [`Added "${adder.name}" to the workspace`];
+
+					return {
+						output: output,
+						clear: false
 					};
 				}
 				default: {
@@ -170,20 +183,19 @@ import commands from '../data/commands.json';
 				e.preventDefault();
 				input.focus();
 			}
-			/*
+
 			if (e.key === ' ' && document.activeElement !== input && !_spaceKeyDown) {
 				e.preventDefault();
 				window.incrementCompute();
 				_spaceKeyDown = true;
 			}
-			*/
 		});
 
-		//document.addEventListener('keyup', (e) => {
-		//	if (e.key === ' ') {
-		//		_spaceKeyDown = false;
-		//	}
-		//});
+		document.addEventListener('keyup', (e) => {
+			if (e.key === ' ') {
+				_spaceKeyDown = false;
+			}
+		});
 
 		input.addEventListener('focus', () => {
 			input.placeholder = "";
