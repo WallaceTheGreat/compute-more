@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import commands from '../data/commands.json';
 ---
 
 <div id="container">
@@ -10,8 +11,10 @@ import '../styles/global.css';
 		</div>
 		<div id="terminal"></div>
 
-		<p>Press space to start computing.</p>
-		<p>type 'help' for commands.</p>
+		<div id="tuto">
+			<p>Press space to start computing.</p>
+			<p>type 'help' for commands.</p>
+		</div>
 	</main>
 </div>
 
@@ -38,13 +41,17 @@ import '../styles/global.css';
 	align-items: center;
 	gap: 0.5rem;
 }
+#container {
+	height: 100vh;
+}
 </style>
 
-<script>
+<script define:vars={{ commands }}>
 	document.addEventListener('DOMContentLoaded', () => {
 		const terminal = document.getElementById('terminal');
 		const input = document.getElementById('terminal-in');
 		const prompt = document.getElementById('prompt');
+		const tuto = document.getElementById('tuto');
 
 		function updatePrompt() {
 			const now = new Date();
@@ -53,26 +60,66 @@ import '../styles/global.css';
 			prompt.textContent = `${hour}:${minute} compute-more >`;
 		}
 
+		function addLine(text, className = '') {
+			const lineEl = document.createElement('p');
+			lineEl.classList.add('terminal-line');
+			if (className) lineEl.classList.add(className);
+			lineEl.textContent = text;
+			terminal.prepend(lineEl);
+		}
+
+		function handleCmd(cmdText) {
+			const [cmd, ...args] = cmdText.trim().split(' ');
+			const command = commands.find(c => c.name === cmd);
+
+			if (cmd === 'help') {
+				return {
+					output: [
+						...commands.map(c => `- ${c.name.toUpperCase()}\t\t\t${c.description}`),
+						'Available commands:'
+					],
+					clear: false
+				};
+			}
+
+			if (cmd === 'clear') {
+				return {
+					output: [],
+					clear: true
+				};
+			}
+
+			if (!command) {
+				return {
+					output: [`Unknown command: ${cmd}`],
+					clear: false
+				};
+			}
+		}
+
+		tuto.remove
 		updatePrompt();
 		setInterval(updatePrompt, 60 * 1000);
 
 		input.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter') {
+				console.log("enter pressed");
 				e.preventDefault();
 				const line = input.value.trim();
 				if (!line) return;
 
-				const lineEl = document.createElement('p');
-				lineEl.classList.add('terminal-line');
-				lineEl.textContent = line;
-
-				terminal.prepend(lineEl);
 				input.value = '';
+				const result = handleCmd(line);
+				if (result.clear) {
+					  terminal.innerHTML = '';
+				} else {
+					  result.output.forEach(text => addLine(text));
+				}
 
 				const lines = terminal.querySelectorAll('.terminal-line');
 				lines.forEach((el, i) => {
-					let opa = 1 - i * 0.15;
-					opa = opa >= 0.15 ? opa : 0.15;
+					let opa = 1 - i * 0.05;
+					opa = opa >= 0.15 ? opa : 0.1;
 					el.style.opacity = opa;
 					console.log(i, el.style.opacity);
 				});
