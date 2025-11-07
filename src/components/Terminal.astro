@@ -87,28 +87,36 @@ import commands from '../data/commands.json';
 			const [cmd, ...args] = cmdText.trim().split(' ');
 			const command = commands.find(c => c.name === cmd);
 
-			if (cmd === 'help') {
-				return {
-					output: [
-						'Available commands:',
-						...commands.map(c => `- ${c.name.toUpperCase()} ${c.description}`)
-					],
-					clear: false
-				};
-			}
+			if (!command) return { output: [`Unknown command: ${cmdText}`]};
 
-			if (cmd === 'clear') {
-				return {
-					output: [],
-					clear: true
-				};
-			}
-
-			if (!command) {
-				return {
-					output: [`Unknown command: ${cmd}`],
-					clear: false
-				};
+			switch(command.name) {
+				case 'help': {
+					return {
+						output: [
+							'Available commands:',
+							...commands.map(c => `${c.name.toUpperCase()} - ${c.description}`)
+						],
+						clear: false
+					};
+				}
+				case 'clear': {
+					return {
+						output: [],
+						clear: true
+					};
+				}
+				case 'run': {
+					return {
+						output: ['Who are you running from ?'],
+						clear: true
+					};
+				}
+				default: {
+					return {
+						output: [`Unknown command: ${cmd}`],
+						clear: false
+					};
+				}
 			}
 		}
 
@@ -127,9 +135,10 @@ import commands from '../data/commands.json';
 				const result = handleCmd(line);
 				if (result.clear) {
 					  terminal.innerHTML = '';
-				} else {
-					  result.output.forEach(text => addLine(text));
 				}
+
+				result.output.forEach(text => addLine(text));
+
 
 				const lines = terminal.querySelectorAll('.terminal-line');
 				lines.forEach((el, i) => {

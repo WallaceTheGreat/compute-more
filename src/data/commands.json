@@ -6,5 +6,9 @@
 	{
 		"name": "clear",
 		"description": "Clears the terminal"
+	},
+	{
+		"name": "run",
+		"description": "run"
 	}
 ]
