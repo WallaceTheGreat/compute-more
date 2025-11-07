@@ -1,0 +1,82 @@
+---
+import '../styles/global.css';
+---
+
+<div id="container">
+	<main>
+		<div class="input-row">
+			<span class="prompt" id="prompt"></span>
+			<input type="text" name="terminal-in" id="terminal-in" autofocus />
+		</div>
+		<div id="terminal"></div>
+
+		<p>Press space to start computing.</p>
+		<p>type 'help' for commands.</p>
+	</main>
+</div>
+
+<style>
+.prompt {
+	color: var(--lean-white);
+}
+#terminal-in {
+	color: var(--lean-white);
+	background: transparent;
+	font-family: 'Space Mono', monospace;
+	border: none;
+	outline: none;
+	padding: 0;
+	margin: 0;
+	flex: 1;
+	caret-color: var(--lean-white);
+}
+#terminal-in::placeholder {
+	color: rgba(255, 255, 255, 0.3);
+}
+.input-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+}
+</style>
+
+<script>
+	document.addEventListener('DOMContentLoaded', () => {
+		const terminal = document.getElementById('terminal');
+		const input = document.getElementById('terminal-in');
+		const prompt = document.getElementById('prompt');
+
+		function updatePrompt() {
+			const now = new Date();
+			const hour = now.getHours().toString().padStart(2, '0');
+			const minute = now.getMinutes().toString().padStart(2, '0');
+			prompt.textContent = `${hour}:${minute} compute-more >`;
+		}
+
+		updatePrompt();
+		setInterval(updatePrompt, 60 * 1000);
+
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				const line = input.value.trim();
+				if (!line) return;
+
+				const lineEl = document.createElement('p');
+				lineEl.classList.add('terminal-line');
+				lineEl.textContent = line;
+
+				terminal.prepend(lineEl);
+				input.value = '';
+
+				const lines = terminal.querySelectorAll('.terminal-line');
+				lines.forEach((el, i) => {
+					let opa = 1 - i * 0.15;
+					opa = opa >= 0.15 ? opa : 0.15;
+					el.style.opacity = opa;
+					console.log(i, el.style.opacity);
+				});
+			}
+		});
+	});
+</script>

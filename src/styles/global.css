@@ -1,6 +1,7 @@
 :root {
 	--background: black;
 	--lean-dark: #0d0d0d;
+	--lean-white: #fefefe;
 }
 
 html {
@@ -8,3 +9,10 @@ html {
 	font-family: sans-serif;
 }
 
+body {
+        font-family: monospace;
+}
+
+p {
+	color: var(--lean-white);
+}
