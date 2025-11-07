@@ -5,15 +5,14 @@ import commands from '../data/commands.json';
 
 <div id="container">
 	<main>
-		<div class="input-row">
-			<span class="prompt" id="prompt"></span>
-			<input type="text" name="terminal-in" id="terminal-in" autofocus />
-		</div>
-		<div id="terminal"></div>
-
 		<div id="tuto">
 			<p>Press space to start computing.</p>
 			<p>type 'help' for commands.</p>
+		</div>
+		<div id="terminal"></div>
+		<div class="input-row">
+			<span class="prompt" id="prompt"></span>
+			<input type="text" name="terminal-in" id="terminal-in" autofocus />
 		</div>
 	</main>
 </div>
@@ -40,9 +39,25 @@ import commands from '../data/commands.json';
 	display: flex;
 	align-items: center;
 	gap: 0.5rem;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	padding: 1rem;
+	background: var(--bg-color);
+	width: 100%;
 }
 #container {
 	height: 100vh;
+}
+#terminal {
+	display: flex;
+	flex-direction: column-reverse;
+	position: fixed;
+	padding-bottom: 3rem;
+	padding-left: 1rem;
+	bottom: 0;
+	left: 0;
+	gap: 0;
 }
 </style>
 
@@ -75,8 +90,8 @@ import commands from '../data/commands.json';
 			if (cmd === 'help') {
 				return {
 					output: [
-						...commands.map(c => `- ${c.name.toUpperCase()}\t\t\t${c.description}`),
-						'Available commands:'
+						'Available commands:',
+						...commands.map(c => `- ${c.name.toUpperCase()} ${c.description}`)
 					],
 					clear: false
 				};
@@ -97,16 +112,16 @@ import commands from '../data/commands.json';
 			}
 		}
 
-		tuto.remove
 		updatePrompt();
 		setInterval(updatePrompt, 60 * 1000);
 
 		input.addEventListener('keydown', (e) => {
 			if (e.key === 'Enter') {
-				console.log("enter pressed");
 				e.preventDefault();
 				const line = input.value.trim();
 				if (!line) return;
+
+				if (tuto) tuto.remove();
 
 				input.value = '';
 				const result = handleCmd(line);
@@ -119,7 +134,7 @@ import commands from '../data/commands.json';
 				const lines = terminal.querySelectorAll('.terminal-line');
 				lines.forEach((el, i) => {
 					let opa = 1 - i * 0.05;
-					opa = opa >= 0.15 ? opa : 0.1;
+					opa = opa >= 0.15 ? opa : 0.2;
 					el.style.opacity = opa;
 					console.log(i, el.style.opacity);
 				});

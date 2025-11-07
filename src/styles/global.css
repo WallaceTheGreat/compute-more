@@ -16,3 +16,9 @@ body {
 p {
 	color: var(--lean-white);
 }
+
+.terminal-line {
+	margin: 0;
+	padding: 0;
+	line-height: 1.8;
+}
