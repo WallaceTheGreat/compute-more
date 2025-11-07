@@ -1,0 +1,10 @@
+:root {
+	--background: black;
+	--lean-dark: #0d0d0d;
+}
+
+html {
+	background-image: linear-gradient(to top, var(--background), var(--lean-dark));
+	font-family: sans-serif;
+}
+
