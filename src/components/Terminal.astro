@@ -149,5 +149,23 @@ import commands from '../data/commands.json';
 				});
 			}
 		});
+
+		document.addEventListener('keydown', (e) => {
+			if (e.key === 'Escape') {
+				e.preventDefault();
+				input.placeholder = "press '/' to focus";
+				input.blur();
+			}
+
+			if (e.key === '/' && document.activeElement !== input) {
+				e.preventDefault();
+				input.focus();
+			}
+		});
+
+		input.addEventListener('focus', () => {
+			input.placeholder = "";
+		});
 	});
+
 </script>
