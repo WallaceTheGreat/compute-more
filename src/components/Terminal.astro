@@ -61,7 +61,15 @@ import commands from '../data/commands.json';
 }
 </style>
 
+<script>
+	import { increment } from '../lib/computeLab.js';
+
+	window.incrementCompute = increment;
+</script>
+
 <script define:vars={{ commands }}>
+	//let _spaceKeyDown = false;
+
 	document.addEventListener('DOMContentLoaded', () => {
 		const terminal = document.getElementById('terminal');
 		const input = document.getElementById('terminal-in');
@@ -154,6 +162,7 @@ import commands from '../data/commands.json';
 			if (e.key === 'Escape') {
 				e.preventDefault();
 				input.placeholder = "press '/' to focus";
+				console.log("here");
 				input.blur();
 			}
 
@@ -161,11 +170,25 @@ import commands from '../data/commands.json';
 				e.preventDefault();
 				input.focus();
 			}
+			/*
+			if (e.key === ' ' && document.activeElement !== input && !_spaceKeyDown) {
+				e.preventDefault();
+				window.incrementCompute();
+				_spaceKeyDown = true;
+			}
+			*/
 		});
+
+		//document.addEventListener('keyup', (e) => {
+		//	if (e.key === ' ') {
+		//		_spaceKeyDown = false;
+		//	}
+		//});
 
 		input.addEventListener('focus', () => {
 			input.placeholder = "";
 		});
 	});
 
+	console.log("feur2");
 </script>

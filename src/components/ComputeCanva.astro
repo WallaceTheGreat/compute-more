@@ -1,12 +1,11 @@
 ---
-import '../styles/global.css';
-
-let computeTotal = 0;
+import { onChange, getTotal } from '../lib/computeLab.js';
+const computeTotal = getTotal();
 ---
 
 <div id="container">
 	<main>
-		<h2>{computeTotal}</h2>
+		<h1 id="compute-total">{computeTotal}</h1>
 	</main>
 </div>
 
@@ -14,9 +13,24 @@ let computeTotal = 0;
 	#container {
 		height: 100vh;
 	}
-
-	h2 {
+	main {
+		height: 100vh;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	h1 {
 		color: var(--lean-white);
 	}
 </style>
 
+<script>
+	import { onChange } from '../lib/computeLab.js';
+
+	const h1 = document.getElementById('compute-total');
+	onChange((newTotal) => {
+		h1.textContent = newTotal;
+	});
+
+	console.log("feur");
+</script>
