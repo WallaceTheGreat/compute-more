@@ -25,11 +25,17 @@ const computeTotal = getTotal();
 </style>
 
 <script>
-	import { onChange } from '../lib/computeLab.js';
+	import { onChange, getTotal } from '../lib/computeLab.js';
+	import {loadTotal} from "../lib/savefile";
 
 	const h1 = document.getElementById('compute-total');
 	onChange((newTotal) => {
 		h1.textContent = newTotal;
+	});
+
+	document.addEventListener('DOMContentLoaded', () => {
+		loadTotal();
+		h1.textContent = getTotal();
 	});
 
 	console.log("feur");

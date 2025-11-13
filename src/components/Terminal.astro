@@ -64,11 +64,14 @@ import computeUnits from '../data/computeUnits.json';
 
 <script>
 	import { increment } from '../lib/computeLab.js';
+	import {saveTotal} from "../lib/savefile";
 
 	window.incrementCompute = increment;
+	window.saveTotal = saveTotal;
 </script>
 
 <script define:vars={{ commands, computeUnits }}>
+
 	let _spaceKeyDown = false;
 
 	document.addEventListener('DOMContentLoaded', () => {
@@ -129,6 +132,14 @@ import computeUnits from '../data/computeUnits.json';
 
 					return {
 						output: output,
+						clear: false
+					};
+				}
+				case 'save': {
+					window.saveTotal();
+
+					return {
+						output: ['Saved the game'],
 						clear: false
 					};
 				}

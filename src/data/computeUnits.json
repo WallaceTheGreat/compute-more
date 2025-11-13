@@ -1,10 +1,7 @@
 [
 	{
-		"name": "8bit-adder",
-		"description": "Flips 8 bits and then increments one to the Compute Score"
-	},
-	{
 		"name": "simple-adder",
-		"description": "Increments 1 to the Compute Score every second"
+		"description": "Increments 1 to the Compute Score every second",
+		"value": 1
 	}
 ]

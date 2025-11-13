@@ -14,5 +14,9 @@
 	{
 		"name": "add",
 		"description": "Adds an element"
+	},
+	{
+		"name": "save",
+		"description": "Saves the game"
 	}
 ]
