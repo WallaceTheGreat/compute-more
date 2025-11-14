@@ -14,7 +14,7 @@ export function simpleAdderLoop() {
 
 	if (_simpleAdders <= 0) return;
 
-	const delay = _SIMPLE_ADDER_BASE / Math.pow(2, _simpleAdders - 1);
+	const delay = _SIMPLE_ADDER_BASE / _simpleAdders;
 
 	_simpleAdderInterval = setInterval(() => {
 		increment();
@@ -22,6 +22,7 @@ export function simpleAdderLoop() {
 }
 export function addSimpleAdder(count = 1) {
 	_simpleAdders += count;
+	console.log("adders count:", _simpleAdders, "cooldown:", _SIMPLE_ADDER_BASE / _simpleAdders);
 	simpleAdderLoop();
 }
 

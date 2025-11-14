@@ -137,8 +137,6 @@ import computeUnits from '../data/computeUnits.json';
 				}
 				case 'add': {
 					const adder = computeUnits.find(unit => args.includes(unit.name));
-					let output = [`Nothing called "${args}"`];
-
 					if (!adder)
 					{
 						return {
@@ -146,8 +144,6 @@ import computeUnits from '../data/computeUnits.json';
 							clear: false
 						};
 					}
-
-					output = [`Added "${adder.name}"`];
 
 					let count = 1;
 					if (args[1])
@@ -160,7 +156,7 @@ import computeUnits from '../data/computeUnits.json';
 					}
 
 					return {
-						output: output,
+						output: [`Added "${adder.name}" x${count}`],
 						clear: false
 					};
 				}
