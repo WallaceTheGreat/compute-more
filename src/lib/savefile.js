@@ -10,5 +10,6 @@ export function loadTotal() {
 }
 
 export function saveInventory() {
-	localStorage.setItem("inv", getCurrentInventory());
+	const invToSave = JSON.stringify(getCurrentInventory());
+	localStorage.setItem("inv", invToSave);
 }

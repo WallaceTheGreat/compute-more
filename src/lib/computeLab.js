@@ -1,6 +1,7 @@
 const listeners = new Set();
 import inventory from '../data/inventory.json';
 
+
 export function increment(amount = 1) {
 	let currentTotal = parseInt(inventory.total);
 	currentTotal += amount;

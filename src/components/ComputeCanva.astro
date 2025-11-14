@@ -27,6 +27,7 @@ const computeTotal = getTotal();
 <script>
 	import { onChange, getTotal } from '../lib/computeLab.js';
 	import {loadTotal} from "../lib/savefile";
+	import {simpleAdderLoop} from "../lib/computeLoops";
 
 	const h1 = document.getElementById('compute-total');
 	onChange((newTotal) => {
@@ -38,5 +39,6 @@ const computeTotal = getTotal();
 		h1.textContent = getTotal();
 	});
 
+	simpleAdderLoop();
 	console.log("feur");
 </script>

@@ -13,81 +13,92 @@ import computeUnits from '../data/computeUnits.json';
 		<div id="terminal"></div>
 		<div class="input-row">
 			<span class="prompt" id="prompt"></span>
-			<input type="text" name="terminal-in" id="terminal-in" autofocus />
+			<input type="text" name="terminal-in" id="terminal-in" autofocus/>
 		</div>
 	</main>
 </div>
 
 <style>
-.prompt {
-	color: var(--lean-white);
-}
-#terminal-in {
-	color: var(--lean-white);
-	background: transparent;
-	font-family: 'Space Mono', monospace;
-	border: none;
-	outline: none;
-	padding: 0;
-	margin: 0;
-	flex: 1;
-	caret-color: var(--lean-white);
-}
-#terminal-in::placeholder {
-	color: rgba(255, 255, 255, 0.3);
-}
-.input-row {
-	display: flex;
-	align-items: center;
-	gap: 0.5rem;
-	position: fixed;
-	bottom: 0;
-	left: 0;
-	padding: 1rem;
-	background: var(--bg-color);
-	width: 100%;
-}
-#container {
-	height: 100vh;
-}
-#terminal {
-	display: flex;
-	flex-direction: column-reverse;
-	position: fixed;
-	padding-bottom: 3rem;
-	padding-left: 1rem;
-	bottom: 0;
-	left: 0;
-	gap: 0;
-}
+    .prompt {
+        color: var(--lean-white);
+    }
+
+    #terminal-in {
+        color: var(--lean-white);
+        background: transparent;
+        font-family: 'Space Mono', monospace;
+        border: none;
+        outline: none;
+        padding: 0;
+        margin: 0;
+        flex: 1;
+        caret-color: var(--lean-white);
+    }
+
+    #terminal-in::placeholder {
+        color: rgba(255, 255, 255, 0.3);
+    }
+
+    .input-row {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        padding: 1rem;
+        background: var(--bg-color);
+        width: 100%;
+    }
+
+    #container {
+        height: 100vh;
+    }
+
+    #terminal {
+        display: flex;
+        flex-direction: column-reverse;
+        position: fixed;
+        padding-bottom: 3rem;
+        padding-left: 1rem;
+        bottom: 0;
+        left: 0;
+        gap: 0;
+    }
 </style>
 
 <script>
-	import { increment } from '../lib/computeLab.js';
-	import {saveTotal} from "../lib/savefile";
+	import {increment} from '../lib/computeLab.js';
+	import {saveInventory} from "../lib/savefile";
+	import {addSimpleAdder} from "../lib/computeLoops";
 
 	window.incrementCompute = increment;
-	window.saveTotal = saveTotal;
+	window.saveInventory = saveInventory;
+	window.addSimpleAdder = addSimpleAdder;
 </script>
 
-<script define:vars={{ commands, computeUnits }}>
+<script define:vars={{commands, computeUnits}}>
+
 
 	let _spaceKeyDown = false;
 
-	document.addEventListener('DOMContentLoaded', () => {
+	document.addEventListener('DOMContentLoaded', () =>
+	{
 		const terminal = document.getElementById('terminal');
 		const input = document.getElementById('terminal-in');
 		const prompt = document.getElementById('prompt');
 		const tuto = document.getElementById('tuto');
 
-		function updatePrompt() {
+		function updatePrompt()
+		{
 			const now = new Date();
 			const hour = now.getHours().toString().padStart(2, '0');
 			const minute = now.getMinutes().toString().padStart(2, '0');
 			prompt.textContent = `${hour}:${minute} compute-more >`;
 		}
 
-		function addLine(text, className = '') {
+		function addLine(text, className = '')
+		{
 			const lineEl = document.createElement('p');
 			lineEl.classList.add('terminal-line');
 			if (className) lineEl.classList.add(className);
@@ -95,13 +106,14 @@ import computeUnits from '../data/computeUnits.json';
 			terminal.prepend(lineEl);
 		}
 
-		function handleCmd(cmdText) {
+		function handleCmd(cmdText)
+		{
 			const [cmd, ...args] = cmdText.trim().split(' ');
 			const command = commands.find(c => c.name === cmd);
 
-			if (!command) return { output: [`Unknown command: ${cmdText}`]};
+			if (!command) return {output: [`Unknown command: ${cmdText}`]};
 
-			switch(command.name) {
+			switch (command.name) {
 				case 'help': {
 					return {
 						output: [
@@ -127,8 +139,25 @@ import computeUnits from '../data/computeUnits.json';
 					const adder = computeUnits.find(unit => args.includes(unit.name));
 					let output = [`Nothing called "${args}"`];
 
-					if (adder)
-						output = [`Added "${adder.name}" to the workspace`];
+					if (!adder)
+					{
+						return {
+							output: [`Nothing called "${args}"`],
+							clear: false
+						};
+					}
+
+					output = [`Added "${adder.name}"`];
+
+					let count = 1;
+					if (args[1])
+						count = parseInt(args[1]);
+
+					if (adder.name === 'simple_adder')
+					{
+						console.log("count:", count);
+						window.addSimpleAdder(count);
+					}
 
 					return {
 						output: output,
@@ -136,7 +165,7 @@ import computeUnits from '../data/computeUnits.json';
 					};
 				}
 				case 'save': {
-					window.saveTotal();
+					window.saveInventory();
 
 					return {
 						output: ['Saved the game'],
@@ -155,7 +184,8 @@ import computeUnits from '../data/computeUnits.json';
 		updatePrompt();
 		setInterval(updatePrompt, 60 * 1000);
 
-		input.addEventListener('keydown', (e) => {
+		input.addEventListener('keydown', (e) =>
+		{
 			if (e.key === 'Enter') {
 				e.preventDefault();
 				const line = input.value.trim();
@@ -166,14 +196,15 @@ import computeUnits from '../data/computeUnits.json';
 				input.value = '';
 				const result = handleCmd(line);
 				if (result.clear) {
-					  terminal.innerHTML = '';
+					terminal.innerHTML = '';
 				}
 
 				result.output.forEach(text => addLine(text));
 
 
 				const lines = terminal.querySelectorAll('.terminal-line');
-				lines.forEach((el, i) => {
+				lines.forEach((el, i) =>
+				{
 					let opa = 1 - i * 0.05;
 					opa = opa >= 0.15 ? opa : 0.2;
 					el.style.opacity = opa;
@@ -182,7 +213,8 @@ import computeUnits from '../data/computeUnits.json';
 			}
 		});
 
-		document.addEventListener('keydown', (e) => {
+		document.addEventListener('keydown', (e) =>
+		{
 			if (e.key === 'Escape') {
 				e.preventDefault();
 				input.placeholder = "press '/' to focus";
@@ -202,13 +234,15 @@ import computeUnits from '../data/computeUnits.json';
 			}
 		});
 
-		document.addEventListener('keyup', (e) => {
+		document.addEventListener('keyup', (e) =>
+		{
 			if (e.key === ' ') {
 				_spaceKeyDown = false;
 			}
 		});
 
-		input.addEventListener('focus', () => {
+		input.addEventListener('focus', () =>
+		{
 			input.placeholder = "";
 		});
 	});
