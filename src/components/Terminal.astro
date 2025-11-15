@@ -79,7 +79,6 @@ import computeUnits from '../data/computeUnits.json';
 
 <script define:vars={{commands, computeUnits}}>
 
-
 	let _spaceKeyDown = false;
 
 	document.addEventListener('DOMContentLoaded', () =>
@@ -136,9 +135,18 @@ import computeUnits from '../data/computeUnits.json';
 					};
 				}
 				case 'add': {
+					if (!args[0] || args[0] === "help") {
+						return {
+							output: [
+								`Compute units available:`,
+								...computeUnits.map(cu => `"${cu.name}" - ${cu.description}`)
+							],
+							clear: false
+						};
+					}
+
 					const adder = computeUnits.find(unit => args.includes(unit.name));
-					if (!adder)
-					{
+					if (!adder) {
 						return {
 							output: [`Nothing called "${args}"`],
 							clear: false
@@ -149,8 +157,7 @@ import computeUnits from '../data/computeUnits.json';
 					if (args[1])
 						count = parseInt(args[1]);
 
-					if (adder.name === 'simple_adder')
-					{
+					if (adder.name === 'simple_adder') {
 						console.log("count:", count);
 						window.addSimpleAdder(count);
 					}
