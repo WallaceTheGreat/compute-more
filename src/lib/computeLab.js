@@ -18,10 +18,6 @@ export function setTotal(newTotal) {
 	console.log("I read total as ", inventory.total)
 }
 
-export function getCurrentInventory() {
-	return inventory;
-}
-
 export function onChange(cb) {
 	listeners.add(cb);
 	return () => listeners.delete(cb);

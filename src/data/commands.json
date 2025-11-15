@@ -18,5 +18,9 @@
 	{
 		"name": "save",
 		"description": "Saves the game"
+	},
+	{
+		"name": "name",
+		"description": "Sets your name"
 	}
 ]

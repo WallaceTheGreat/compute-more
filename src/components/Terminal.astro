@@ -69,12 +69,14 @@ import computeUnits from '../data/computeUnits.json';
 
 <script>
 	import {increment} from '../lib/computeLab.js';
-	import {saveInventory} from "../lib/savefile";
+	import {getName, saveInventory, setName} from "../lib/savefile";
 	import {addSimpleAdder} from "../lib/computeLoops";
 
 	window.incrementCompute = increment;
 	window.saveInventory = saveInventory;
 	window.addSimpleAdder = addSimpleAdder;
+	window.getName = getName;
+	window.setName = setName;
 </script>
 
 <script define:vars={{commands, computeUnits}}>
@@ -93,7 +95,7 @@ import computeUnits from '../data/computeUnits.json';
 			const now = new Date();
 			const hour = now.getHours().toString().padStart(2, '0');
 			const minute = now.getMinutes().toString().padStart(2, '0');
-			prompt.textContent = `${hour}:${minute} compute-more >`;
+			prompt.textContent = `${hour}:${minute} ${window.getName()}@compute-more >`;
 		}
 
 		function addLine(text, className = '')
@@ -164,6 +166,23 @@ import computeUnits from '../data/computeUnits.json';
 
 					return {
 						output: [`Added "${adder.name}" x${count}`],
+						clear: false
+					};
+				}
+				case 'name': {
+					if (!args[0])
+					{
+						return {
+							output: ['No name was entered'],
+							clear: false
+						};
+					}
+
+					window.setName(args[0]);
+					updatePrompt();
+
+					return {
+						output: [`Greetings, employee ${args[0]}`],
 						clear: false
 					};
 				}
