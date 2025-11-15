@@ -2,6 +2,8 @@
 	--background: black;
 	--lean-dark: #0d0d0d;
 	--lean-white: #fefefe;
+    --blue: #3ab0ff;
+    --green: #32d96c;
 }
 
 html {
@@ -22,3 +24,12 @@ p {
 	padding: 0;
 	line-height: 1.8;
 }
+
+.username {
+    color: var(--blue);
+}
+
+.host {
+    color: var(--green);
+}
+

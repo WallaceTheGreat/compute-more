@@ -95,7 +95,11 @@ import computeUnits from '../data/computeUnits.json';
 			const now = new Date();
 			const hour = now.getHours().toString().padStart(2, '0');
 			const minute = now.getMinutes().toString().padStart(2, '0');
-			prompt.textContent = `${hour}:${minute} ${window.getName()}@compute-more >`;
+			const name = window.getName();
+
+			prompt.innerHTML = `
+				${hour}:${minute} 
+				<span class="username">${name}</span><span class="host">@compute-more</span> >`;
 		}
 
 		function addLine(text, className = '')
