@@ -68,19 +68,11 @@ import computeUnits from '../data/computeUnits.json';
 </style>
 
 <script>
-	import {increment} from '../lib/computeLab.ts';
+	import {increment} from '../lib/computeLab.js';
 	import {getName, saveInventory, setName} from "../lib/savefile";
 	import {addDoubleAdder, addSimpleAdder} from "../lib/computeLoops";
-
-	window.incrementCompute = increment;
-	window.saveInventory = saveInventory;
-	window.addSimpleAdder = addSimpleAdder;
-	window.addDoubleAdder = addDoubleAdder;
-	window.getName = getName;
-	window.setName = setName;
-</script>
-
-<script define:vars={{commands, computeUnits}}>
+	import commands from '../data/commands.json';
+	import computeUnits from '../data/computeUnits.json';
 
 	let _spaceKeyDown = false;
 
@@ -96,7 +88,7 @@ import computeUnits from '../data/computeUnits.json';
 			const now = new Date();
 			const hour = now.getHours().toString().padStart(2, '0');
 			const minute = now.getMinutes().toString().padStart(2, '0');
-			const name = window.getName();
+			const name = getName();
 
 			prompt.innerHTML = `
 				${hour}:${minute} 
@@ -110,6 +102,18 @@ import computeUnits from '../data/computeUnits.json';
 			if (className) lineEl.classList.add(className);
 			lineEl.textContent = text;
 			terminal.prepend(lineEl);
+		}
+
+		function handleAddCmd(adderName, count)
+		{
+			switch (adderName) {
+				case 'simple_adder':
+					addSimpleAdder(count);
+					break;
+				case 'double_adder':
+					addDoubleAdder(count);
+					break;
+			}
 		}
 
 		function handleCmd(cmdText)
@@ -130,16 +134,10 @@ import computeUnits from '../data/computeUnits.json';
 					};
 				}
 				case 'clear': {
-					return {
-						output: [],
-						clear: true
-					};
+					return {output: [], clear: true};
 				}
 				case 'run': {
-					return {
-						output: ['Who are you running from ?'],
-						clear: true
-					};
+					return {output: ['Who are you running from ?'], clear: true};
 				}
 				case 'add': {
 					if (!args[0] || args[0] === "help") {
@@ -154,70 +152,34 @@ import computeUnits from '../data/computeUnits.json';
 
 					const adder = computeUnits.find(unit => args.includes(unit.name));
 					if (!adder) {
-						return {
-							output: [`Nothing called "${args}"`],
-							clear: false
-						};
+						return {output: [`Nothing called "${args}"`], clear: false};
 					}
 
 					let count = 1;
-					if (args[1])
-						count = parseInt(args[1]);
+					if (args[1]) count = parseInt(args[1]);
 
 					handleAddCmd(adder.name, count);
 
-					return {
-						output: [`Added "${adder.name}" x${count}`],
-						clear: false
-					};
+					return {output: [`Added "${adder.name}" x${count}`], clear: false};
 				}
 				case 'name': {
 					if (!args[0]) {
-						return {
-							output: ['No name was entered'],
-							clear: false
-						};
+						return {output: ['No name was entered'], clear: false};
 					}
 
-					window.setName(args[0]);
+					setName(args[0]);
 					updatePrompt();
 
-					return {
-						output: [`Greetings, employee ${args[0]}`],
-						clear: false
-					};
+					return {output: [`Greetings, employee ${args[0]}`], clear: false};
 				}
 				case 'save': {
-					window.saveInventory();
-
-					return {
-						output: ['Saved the game'],
-						clear: false
-					};
+					saveInventory();
+					return {output: ['Saved the game'], clear: false};
 				}
 				default: {
-					return {
-						output: [`Unknown command: ${cmd}`],
-						clear: false
-					};
+					return {output: [`Unknown command: ${cmd}`], clear: false};
 				}
 			}
-		}
-
-		function handleAddCmd(adderName, count)
-		{
-			switch (adderName) {
-				case 'simple_adder':
-					window.addSimpleAdder(count);
-					break;
-				case 'double_adder':
-					console.log("adding double adder");
-					window.addDoubleAdder(count);
-					break;
-				default:
-					break;
-			}
-
 		}
 
 		updatePrompt();
@@ -240,14 +202,12 @@ import computeUnits from '../data/computeUnits.json';
 
 				result.output.forEach(text => addLine(text));
 
-
 				const lines = terminal.querySelectorAll('.terminal-line');
 				lines.forEach((el, i) =>
 				{
 					let opa = 1 - i * 0.05;
 					opa = opa >= 0.15 ? opa : 0.2;
 					el.style.opacity = opa;
-					console.log(i, el.style.opacity);
 				});
 			}
 		});
@@ -257,7 +217,6 @@ import computeUnits from '../data/computeUnits.json';
 			if (e.key === 'Escape') {
 				e.preventDefault();
 				input.placeholder = "press '/' to focus";
-				console.log("here");
 				input.blur();
 			}
 
@@ -268,7 +227,7 @@ import computeUnits from '../data/computeUnits.json';
 
 			if (e.key === ' ' && document.activeElement !== input && !_spaceKeyDown) {
 				e.preventDefault();
-				window.incrementCompute();
+				increment();
 				_spaceKeyDown = true;
 			}
 		});
