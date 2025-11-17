@@ -1,4 +1,4 @@
-import {increment} from "./computeLab.js";
+import {increment} from "./computeLab.ts";
 
 let _simpleAdderInterval = null;
 let _simpleAdders = 0;
@@ -32,7 +32,7 @@ export function doubleAdderLoop() {
 		_doubleAdderInterval = null;
 	}
 
-	if (_simpleAdders <= 0) return;
+	if (_doubleAdders <= 0) return;
 
 	const delay = _DOUBLE_ADDER_BASE / _doubleAdders;
 

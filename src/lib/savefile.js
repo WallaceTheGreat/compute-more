@@ -1,4 +1,4 @@
-import {setTotal} from "./computeLab.js";
+import {setTotal} from "./computeLab.ts";
 import inventory from '../data/inventory.json';
 
 export function loadTotal()
