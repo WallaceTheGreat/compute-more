@@ -19,62 +19,63 @@ import computeUnits from '../data/computeUnits.json';
 </div>
 
 <style>
-    .prompt {
-        color: var(--lean-white);
-    }
+	.prompt {
+		color: var(--lean-white);
+	}
 
-    #terminal-in {
-        color: var(--lean-white);
-        background: transparent;
-        font-family: 'Space Mono', monospace;
-        border: none;
-        outline: none;
-        padding: 0;
-        margin: 0;
-        flex: 1;
-        caret-color: var(--lean-white);
-    }
+	#terminal-in {
+		color: var(--lean-white);
+		background: transparent;
+		font-family: 'Space Mono', monospace;
+		border: none;
+		outline: none;
+		padding: 0;
+		margin: 0;
+		flex: 1;
+		caret-color: var(--lean-white);
+	}
 
-    #terminal-in::placeholder {
-        color: rgba(255, 255, 255, 0.3);
-    }
+	#terminal-in::placeholder {
+		color: rgba(255, 255, 255, 0.3);
+	}
 
-    .input-row {
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        padding: 1rem;
-        background: var(--bg-color);
-        width: 100%;
-    }
+	.input-row {
+		display: flex;
+		align-items: center;
+		gap: 0.5rem;
+		position: fixed;
+		bottom: 0;
+		left: 0;
+		padding: 1rem;
+		background: var(--bg-color);
+		width: 100%;
+	}
 
-    #container {
-        height: 100vh;
-    }
+	#container {
+		height: 100vh;
+	}
 
-    #terminal {
-        display: flex;
-        flex-direction: column-reverse;
-        position: fixed;
-        padding-bottom: 3rem;
-        padding-left: 1rem;
-        bottom: 0;
-        left: 0;
-        gap: 0;
-    }
+	#terminal {
+		display: flex;
+		flex-direction: column-reverse;
+		position: fixed;
+		padding-bottom: 3rem;
+		padding-left: 1rem;
+		bottom: 0;
+		left: 0;
+		gap: 0;
+	}
 </style>
 
 <script>
 	import {increment} from '../lib/computeLab.js';
 	import {getName, saveInventory, setName} from "../lib/savefile";
-	import {addSimpleAdder} from "../lib/computeLoops";
+	import {addDoubleAdder, addSimpleAdder} from "../lib/computeLoops";
 
 	window.incrementCompute = increment;
 	window.saveInventory = saveInventory;
 	window.addSimpleAdder = addSimpleAdder;
+	window.addDoubleAdder = addDoubleAdder;
 	window.getName = getName;
 	window.setName = setName;
 </script>
@@ -163,10 +164,7 @@ import computeUnits from '../data/computeUnits.json';
 					if (args[1])
 						count = parseInt(args[1]);
 
-					if (adder.name === 'simple_adder') {
-						console.log("count:", count);
-						window.addSimpleAdder(count);
-					}
+					handleAddCmd(adder.name, count);
 
 					return {
 						output: [`Added "${adder.name}" x${count}`],
@@ -174,8 +172,7 @@ import computeUnits from '../data/computeUnits.json';
 					};
 				}
 				case 'name': {
-					if (!args[0])
-					{
+					if (!args[0]) {
 						return {
 							output: ['No name was entered'],
 							clear: false
@@ -205,6 +202,22 @@ import computeUnits from '../data/computeUnits.json';
 					};
 				}
 			}
+		}
+
+		function handleAddCmd(adderName, count)
+		{
+			switch (adderName) {
+				case 'simple_adder':
+					window.addSimpleAdder(count);
+					break;
+				case 'double_adder':
+					console.log("adding double adder");
+					window.addDoubleAdder(count);
+					break;
+				default:
+					break;
+			}
+
 		}
 
 		updatePrompt();
@@ -272,6 +285,4 @@ import computeUnits from '../data/computeUnits.json';
 			input.placeholder = "";
 		});
 	});
-
-	console.log("feur2");
 </script>

@@ -3,5 +3,10 @@
 		"name": "simple_adder",
 		"description": "Increments 1 to the Compute Score every second",
 		"base": 1000
+	},
+	{
+		"name": "double_adder",
+		"description": "Increments 2 to the Compute Score every second",
+		"base": 1000
 	}
 ]
