@@ -26,10 +26,11 @@ p {
 }
 
 .username {
-    color: var(--blue);
+    /*color: var(--blue);*/
 }
 
 .host {
-    color: var(--green);
+    /*color: var(--green);*/
+    font-weight: bolder;
 }
 
