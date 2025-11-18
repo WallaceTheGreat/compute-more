@@ -4,14 +4,13 @@ import { doubleAdderLoop, simpleAdderLoop } from '../lib/computeLoops.js';
 
 export function initComputeCanva() {
 	const h1 = document.getElementById('compute-total');
+
+	loadTotal();
 	h1.textContent = getTotal();
 
 	onChange((newTotal) => {
 		h1.textContent = newTotal;
 	});
-
-	loadTotal();
-	h1.textContent = getTotal();
 
 	simpleAdderLoop();
 	doubleAdderLoop();
