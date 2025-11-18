@@ -1,0 +1,70 @@
+#main-columns {
+	display: flex;
+	flex-direction: row;
+	height: 100vh;
+	width: 100vw;
+	overflow: hidden;
+}
+
+#main-columns > * {
+	flex: 1;
+	overflow: auto;
+}
+
+.container {
+	height: 100vh;
+}
+
+.prompt {
+	color: var(--lean-white);
+}
+
+#terminal-in {
+	color: var(--lean-white);
+	background: transparent;
+	font-family: 'Space Mono', monospace;
+	border: none;
+	outline: none;
+	padding: 0;
+	margin: 0;
+	flex: 1;
+	caret-color: var(--lean-white);
+}
+
+#terminal-in::placeholder {
+	color: rgba(255, 255, 255, 0.3);
+}
+
+.input-row {
+	display: flex;
+	align-items: center;
+	gap: 0.5rem;
+	position: fixed;
+	bottom: 0;
+	left: 0;
+	padding: 1rem;
+	background: var(--background);
+	width: 100%;
+}
+
+#terminal {
+	display: flex;
+	flex-direction: column-reverse;
+	position: fixed;
+	padding-bottom: 3rem;
+	padding-left: 1rem;
+	bottom: 0;
+	left: 0;
+	gap: 0;
+}
+
+#main-compute {
+	height: 100vh;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+#compute-total {
+	color: var(--lean-white);
+}
