@@ -4,7 +4,7 @@ import inventory from '../data/inventory.json';
 export function loadTotal()
 {
 	const savedTotal = localStorage.getItem("total");
-	setTotal(savedTotal);
+	!savedTotal ? setTotal(0) : setTotal(savedTotal);
 }
 
 export function saveInventory()

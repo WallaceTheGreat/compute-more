@@ -5,6 +5,7 @@ import { doubleAdderLoop, simpleAdderLoop } from '../lib/computeLoops.js';
 export function initComputeCanva() {
 	const h1 = document.getElementById('compute-total');
 
+	console.log(h1);
 	loadTotal();
 	h1.textContent = getTotal();
 
