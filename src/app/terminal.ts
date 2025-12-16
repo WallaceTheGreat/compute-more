@@ -1,18 +1,21 @@
 import { increment } from '../lib/computeLab.ts';
-import { getName, saveInventory, setName } from '../lib/savefile.js';
-import { addDoubleAdder, addSimpleAdder } from '../lib/computeLoops.js';
+import { getName, saveInventory, setName } from '../lib/savefile.ts';
+import { addDoubleAdder, addSimpleAdder } from '../lib/computeLoops.ts';
 import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
+import { CommandResult } from '../lib/types/command.ts';
 
 let _spaceKeyDown = false;
 
-export function initTerminal() {
+export const initTerminal = (): void => {
 	const terminal = document.getElementById('terminal');
-	const input = document.getElementById('terminal-in');
+	const input = document.getElementById('terminal-in') as HTMLInputElement;
 	const prompt = document.getElementById('prompt');
 	const tuto = document.getElementById('tuto');
 
-	function updatePrompt() {
+	const updatePrompt = (): void => {
+		if (!prompt) return;
+
 		const now = new Date();
 		const hour = now.getHours().toString().padStart(2, '0');
 		const minute = now.getMinutes().toString().padStart(2, '0');
@@ -21,17 +24,19 @@ export function initTerminal() {
 		prompt.innerHTML = `
 			${hour}:${minute} 
 			<span class="username">${name}</span><span class="host">@compute-more</span> >`;
-	}
+	};
 
-	function addLine(text, className = '') {
+	const addLine = (text: string, className = ''): void => {
+		if (!terminal) return;
+
 		const lineEl = document.createElement('p');
 		lineEl.classList.add('terminal-line');
 		if (className) lineEl.classList.add(className);
 		lineEl.textContent = text;
 		terminal.prepend(lineEl);
-	}
+	};
 
-	function handleAddCmd(adderName, count) {
+	const handleAddCmd = (adderName: string, count: number): void => {
 		switch (adderName) {
 			case 'simple_adder':
 				addSimpleAdder(count);
@@ -40,9 +45,9 @@ export function initTerminal() {
 				addDoubleAdder(count);
 				break;
 		}
-	}
+	};
 
-	function handleCmd(cmdText) {
+	const handleCmd = (cmdText: string): CommandResult => {
 		const [cmd, ...args] = cmdText.trim().split(' ');
 		const command = commands.find(c => c.name === cmd);
 
@@ -105,46 +110,56 @@ export function initTerminal() {
 				return { output: [`Unknown command: ${cmd}`], clear: false };
 			}
 		}
-	}
+	};
 
 	updatePrompt();
 	setInterval(updatePrompt, 60 * 1000);
 
-	input.addEventListener('keydown', (e) => {
-		if (e.key === 'Enter') {
-			e.preventDefault();
-			const line = input.value.trim();
-			if (!line) return;
+	if (input) {
+		input.addEventListener('keydown', (e) => {
+			if (e.key === 'Enter') {
+				e.preventDefault();
+				const line = input.value.trim();
+				if (!line) return;
 
-			if (tuto) tuto.remove();
+				if (tuto) tuto.remove();
 
-			input.value = '';
-			const result = handleCmd(line);
-			if (result.clear) {
-				terminal.innerHTML = '';
+				input.value = '';
+				const result = handleCmd(line);
+				if (result.clear && terminal) {
+					terminal.innerHTML = '';
+				}
+
+				result.output.forEach(text => addLine(text));
+
+				if (terminal) {
+					const lines = terminal.querySelectorAll('.terminal-line');
+					lines.forEach((el, i) => {
+						let opa = 1 - i * 0.05;
+						opa = opa >= 0.15 ? opa : 0.2;
+						(el as HTMLElement).style.opacity = opa.toString();
+					});
+				}
 			}
+		});
 
-			result.output.forEach(text => addLine(text));
-
-			const lines = terminal.querySelectorAll('.terminal-line');
-			lines.forEach((el, i) => {
-				let opa = 1 - i * 0.05;
-				opa = opa >= 0.15 ? opa : 0.2;
-				el.style.opacity = opa;
-			});
-		}
-	});
+		input.addEventListener('focus', () => {
+			input.placeholder = "";
+		});
+	}
 
 	document.addEventListener('keydown', (e) => {
 		if (e.key === 'Escape') {
 			e.preventDefault();
-			input.placeholder = "press '/' to focus";
-			input.blur();
+			if (input) {
+				input.placeholder = "press '/' to focus";
+				input.blur();
+			}
 		}
 
 		if (e.key === '/' && document.activeElement !== input) {
 			e.preventDefault();
-			input.focus();
+			if (input) input.focus();
 		}
 
 		if (e.key === ' ' && document.activeElement !== input && !_spaceKeyDown) {
@@ -159,8 +174,4 @@ export function initTerminal() {
 			_spaceKeyDown = false;
 		}
 	});
-
-	input.addEventListener('focus', () => {
-		input.placeholder = "";
-	});
-}
+};
