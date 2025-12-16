@@ -1,5 +1,5 @@
 import { increment } from "./computeLab.ts";
-import { getSimpleAdders, getDoubleAdders } from './savefile.ts';
+import { getSimpleAdders, getDoubleAdders, setSimpleAdders, setDoubleAdders } from './savefile.ts';
 
 let _simpleAdderInterval: number | null = null;
 let _simpleAdders: number = 0;
@@ -48,11 +48,12 @@ export const doubleAdderLoop = (): void => {
 
 export const addSimpleAdder = (count: number = 1): void => {
 	_simpleAdders += count;
+	setSimpleAdders(_simpleAdders);
 	simpleAdderLoop();
 };
 
 export const addDoubleAdder = (count: number = 1): void => {
 	_doubleAdders += count;
-	console.log("double adder count:", _doubleAdders);
+	setDoubleAdders(_doubleAdders);
 	doubleAdderLoop();
 };
