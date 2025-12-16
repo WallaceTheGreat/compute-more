@@ -7,9 +7,18 @@ export const loadTotal = (): void => {
 	!savedTotal ? setTotal(0) : setTotal(Number(savedTotal));
 };
 
+export const getCurrentInventory = (): typeof inventory => {
+	return inventory;
+};
+
 export const saveInventory = (): void => {
 	const invToSave: string = JSON.stringify(inventory);
 	localStorage.setItem("inv", invToSave);
+};
+
+export const getName = (): string => {
+	console.log("name:", (inventory as Inventory).employee);
+	return (inventory as Inventory).employee;
 };
 
 export const setName = (newName: string): void => {
@@ -19,11 +28,3 @@ export const setName = (newName: string): void => {
 	(inventory as Inventory).employee = newName;
 };
 
-export const getCurrentInventory = (): typeof inventory => {
-	return inventory;
-};
-
-export const getName = (): string => {
-	console.log("name:", (inventory as Inventory).employee);
-	return (inventory as Inventory).employee;
-};
