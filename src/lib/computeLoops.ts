@@ -1,4 +1,5 @@
 import { increment } from "./computeLab.ts";
+import { getSimpleAdders, getDoubleAdders } from './savefile.ts';
 
 let _simpleAdderInterval: number | null = null;
 let _simpleAdders: number = 0;
@@ -8,6 +9,11 @@ let _doubleAdders: number = 0;
 
 const _SIMPLE_ADDER_BASE: number = 1000;
 const _DOUBLE_ADDER_BASE: number = 1000;
+
+export const initAdders = (): void => {
+	_simpleAdders = getSimpleAdders() ?? 0;
+	_doubleAdders = getDoubleAdders() ?? 0;
+}
 
 export const simpleAdderLoop = (): void => {
 	if (_simpleAdderInterval) {
