@@ -1,19 +1,17 @@
-const listeners = new Set();
-import inventory from '../data/inventory.json';
+type Listener = (value: string) => void;
+
+const listeners = new Set<Listener>();
+import { getTotal, setTotal } from './savefile.ts';
 
 export const increment = (amount: number = 1): void => {
-	let currentTotal: number = parseInt(String(inventory.total));
+	let currentTotal: number = getTotal();
 	currentTotal += amount;
-	inventory.total = currentTotal;
+	setTotal(currentTotal);
 
-	listeners.forEach(cb => cb(inventory.total));
+	listeners.forEach(cb => cb(getTotal().toString()));
 }
 
-export const getTotal = (): number => { return inventory.total; }
-
-export const setTotal = (newTotal: number): void => { inventory.total = newTotal; }
-
-export const onChange = (cb: any): any => {
+export const onChange = (cb: Listener): any => {
 	listeners.add(cb);
 	return () => listeners.delete(cb);
 }

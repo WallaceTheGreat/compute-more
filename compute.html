@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<link rel="icon" type="image/svg+xml" href="/favicon.ico"/>
+	<link rel="stylesheet" href="styles/global.css"/>
+	<link rel="stylesheet" href="styles/compute.css"/>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+	<title>Compute More</title>
+</head>
+<body>
+<div id="main-columns">
+	<div class="container">
+		<main id="main-terminal">
+			<div id="tuto">
+				<p>Press space to start computing.</p>
+				<p>type 'help' for commands.</p>
+			</div>
+			<div id="terminal"></div>
+			<div class="input-row">
+				<span class="prompt" id="prompt"></span>
+				<input type="text" name="terminal-in" id="terminal-in" autofocus/>
+			</div>
+		</main>
+	</div>
+	<div class="container">
+		<main id="main-compute">
+			<h1 id="compute-total">0</h1>
+		</main>
+	</div>
+</div>
+
+<script type="module" src="./src/app/main.ts"></script>
+</body>
+</html>
