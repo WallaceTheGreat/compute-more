@@ -1,4 +1,6 @@
-const listeners = new Set();
+type Listener = (value: string) => void;
+
+const listeners = new Set<Listener>();
 import { getTotal, setTotal } from './savefile.ts';
 
 export const increment = (amount: number = 1): void => {
@@ -9,7 +11,7 @@ export const increment = (amount: number = 1): void => {
 	listeners.forEach(cb => cb(getTotal().toString()));
 }
 
-export const onChange = (cb: any): any => {
+export const onChange = (cb: Listener): any => {
 	listeners.add(cb);
 	return () => listeners.delete(cb);
 }

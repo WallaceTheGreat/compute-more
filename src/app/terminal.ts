@@ -1,5 +1,5 @@
 import { increment } from '../lib/computeLab.ts';
-import { getName, saveInventory, setName } from '../lib/savefile.ts';
+import { getName, saveInventory, setName, saveFlags } from '../lib/savefile.ts';
 import { addDoubleAdder, addSimpleAdder } from '../lib/computeLoops.ts';
 import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
@@ -97,13 +97,21 @@ export const initTerminal = (): void => {
 					return { output: ['No name was entered'], clear: false };
 				}
 
-				setName(args[0]);
+				const isSet: boolean = setName(args[0]);
 				updatePrompt();
+
+				if (!isSet)
+				{
+					const foundName = getName();
+
+					return { output: [`You've already told us your name, employee ${foundName}`], clear: false };
+				}
 
 				return { output: [`Greetings, employee ${args[0]}`], clear: false };
 			}
 			case 'save': {
 				saveInventory();
+				saveFlags();
 				return { output: ['Saved the game'], clear: false };
 			}
 			default: {

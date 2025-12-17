@@ -1,12 +1,11 @@
 import defaultInventory from '../data/inventory.json';
+import defaultFlags from '../data/flags.json';
 
 type Inventory = typeof defaultInventory;
+type Flags = typeof defaultFlags;
 
-let _inventory: Inventory = { ...defaultInventory };
-
-export const getCurrentInventory = (): typeof _inventory => {
-	return _inventory;
-};
+let _inventory: Inventory = {...defaultInventory};
+let _flags: Flags = {...defaultFlags};
 
 export const loadInventory = (): void => {
 	const savedInv: string | null = localStorage.getItem("inv");
@@ -14,7 +13,7 @@ export const loadInventory = (): void => {
 		try {
 			_inventory = JSON.parse(savedInv);
 		} catch (e) {
-			_inventory = { ...defaultInventory };
+			_inventory = {...defaultInventory};
 		}
 	}
 }
@@ -24,16 +23,40 @@ export const saveInventory = (): void => {
 	localStorage.setItem("inv", invToSave);
 };
 
-export const getName = (): string => {
-	console.log("name:", (_inventory as Inventory).employee);
-	return (_inventory as Inventory).employee;
+export const loadFlags = (): void => {
+	const savedFlags: string | null = localStorage.getItem("flags");
+	if (savedFlags) {
+		try {
+			_flags = JSON.parse(savedFlags);
+		} catch (e) {
+			_flags = {...defaultInventory};
+		}
+	}
+}
+
+export const saveFlags = (): void => {
+	const flagsToSave: string = JSON.stringify(_flags);
+	localStorage.setItem("flags", flagsToSave);
 };
 
-export const setName = (newName: string): void => {
+export const getName = (): string => {
+	console.log("name:", _inventory.employee);
+	return _inventory.employee;
+};
+
+export const setName = (newName: string): boolean => {
+	if (_flags.name_set) {
+		_flags.name_reset_attempt++;
+		return false;
+	}
+
 	if (newName.length > 15) {
 		newName = newName.substring(0, 15);
 	}
-	(_inventory as Inventory).employee = newName;
+	_inventory.employee = newName;
+	_flags.name_set = true;
+
+	return true;
 };
 
 export const getTotal = (): number => { return _inventory.total; }
