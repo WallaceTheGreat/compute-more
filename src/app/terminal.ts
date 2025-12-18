@@ -100,8 +100,7 @@ export const initTerminal = (): void => {
 				const isSet: boolean = setName(args[0]);
 				updatePrompt();
 
-				if (!isSet)
-				{
+				if (!isSet) {
 					const foundName = getName();
 
 					return { output: [`You've already told us your name, employee ${foundName}`], clear: false };
