@@ -3,6 +3,7 @@ import { getName, saveInventory, setName, saveFlags } from '../lib/savefile.ts';
 import { addDoubleAdder, addSimpleAdder } from '../lib/computeLoops.ts';
 import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
+import reservedNames from '../data/reserved_names.json';
 import { CommandResult } from '../lib/types/command.ts';
 
 let _spaceKeyDown = false;
@@ -97,16 +98,41 @@ export const initTerminal = (): void => {
 					return { output: ['No name was entered'], clear: false };
 				}
 
+				const reservedEntry = reservedNames
+					.find(entry => entry.name.toLowerCase() === args[0].toLowerCase()
+					);
+
+				let output: string = `Greetings, employee ${args[0]}`;
+				if (reservedEntry) {
+					const customMessage = reservedEntry.custom_message;
+
+					if (!reservedEntry.allow) {
+						return { output: [customMessage], clear: false };
+					}
+
+					if (reservedEntry.hide_employee) {
+						output = `Greetings, ${args[0]}`;
+					}
+					if (reservedEntry.hide_default) {
+						output = customMessage;
+					}
+				}
+
 				const isSet: boolean = setName(args[0]);
 				updatePrompt();
 
 				if (!isSet) {
 					const foundName = getName();
+					const reservedFoundName = reservedNames
+						.find(entry => entry.name.toLowerCase() === foundName.toLowerCase()
+						);
+					const employeeLabel: string = reservedFoundName?.hide_employee ? `${foundName}` : `employee ${foundName}`;
+					output = `You've already told us your name, ${employeeLabel}`;
 
-					return { output: [`You've already told us your name, employee ${foundName}`], clear: false };
+					return { output: [output], clear: false };
 				}
 
-				return { output: [`Greetings, employee ${args[0]}`], clear: false };
+				return { output: [output], clear: false };
 			}
 			case 'save': {
 				saveInventory();

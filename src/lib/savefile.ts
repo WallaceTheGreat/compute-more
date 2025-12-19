@@ -4,8 +4,8 @@ import defaultFlags from '../data/flags.json';
 type Inventory = typeof defaultInventory;
 type Flags = typeof defaultFlags;
 
-let _inventory: Inventory = {...defaultInventory};
-let _flags: Flags = {...defaultFlags};
+let _inventory: Inventory = { ...defaultInventory };
+let _flags: Flags = { ...defaultFlags };
 
 export const loadInventory = (): void => {
 	const savedInv: string | null = localStorage.getItem("inv");
@@ -13,7 +13,7 @@ export const loadInventory = (): void => {
 		try {
 			_inventory = JSON.parse(savedInv);
 		} catch (e) {
-			_inventory = {...defaultInventory};
+			_inventory = { ...defaultInventory };
 		}
 	}
 }
@@ -29,7 +29,7 @@ export const loadFlags = (): void => {
 		try {
 			_flags = JSON.parse(savedFlags);
 		} catch (e) {
-			_flags = {...defaultInventory};
+			_flags = { ...defaultInventory };
 		}
 	}
 }
@@ -53,6 +53,7 @@ export const setName = (newName: string): boolean => {
 	if (newName.length > 15) {
 		newName = newName.substring(0, 15);
 	}
+
 	_inventory.employee = newName;
 	_flags.name_set = true;
 

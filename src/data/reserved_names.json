@@ -1,0 +1,23 @@
+[
+	{
+		"name": "God",
+		"allow": false,
+		"hide_employee": true,
+		"hide_default": true,
+		"custom_message": ""
+	},
+	{
+		"name": "Wallace",
+		"allow": true,
+		"hide_employee": false,
+		"hide_default": true,
+		"custom_message": "The one, the almighty"
+	},
+	{
+		"name": "employeeunknown",
+		"allow": false,
+		"hide_employee": true,
+		"hide_default": true,
+		"custom_message": "Yes, who are you ?"
+	}
+]
