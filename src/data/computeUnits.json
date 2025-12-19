@@ -4,14 +4,14 @@
 		"description": "Increments 1 to the Compute Score every second",
 		"base": 1000,
 		"quota_index": 1,
-		"price": 1000
+		"price": 200
 	},
 	{
 		"name": "double_adder",
 		"description": "Increments 2 to the Compute Score every second",
 		"base": 1000,
 		"quota_index": 2,
-		"price": 2000
+		"price": 600
 	},
 	{
 		"name": "cache",

@@ -19,5 +19,12 @@
 		"hide_employee": true,
 		"hide_default": true,
 		"custom_message": "Yes, who are you ?"
+	},
+	{
+		"name": "Daniel",
+		"allow": false,
+		"hide_employee": true,
+		"hide_default": true,
+		"custom_message": "You haven't entered your name, please enter your name"
 	}
 ]

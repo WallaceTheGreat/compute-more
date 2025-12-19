@@ -1,5 +1,5 @@
 import { increment } from '../lib/computeLab.ts';
-import { getName, saveInventory, setName, saveFlags } from '../lib/savefile.ts';
+import { getName, saveInventory, setName, saveFlags, clearSavefile } from '../lib/savefile.ts';
 import { addDoubleAdder, addSimpleAdder } from '../lib/computeEconomy.ts';
 import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
@@ -138,6 +138,10 @@ export const initTerminal = (): void => {
 				saveInventory();
 				saveFlags();
 				return { output: ['Saved the game'], clear: false };
+			}
+			case 'reset': {
+				clearSavefile();
+				return { output: ['Save file cleared'], clear: true };
 			}
 			default: {
 				return { output: [`Unknown command: ${cmd}`], clear: false };

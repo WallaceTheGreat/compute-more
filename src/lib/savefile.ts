@@ -1,5 +1,6 @@
 import defaultInventory from '../data/inventory.json';
 import defaultFlags from '../data/flags.json';
+import { simpleAdderLoop, doubleAdderLoop } from './computeLoops.ts';
 
 type Inventory = typeof defaultInventory;
 type Flags = typeof defaultFlags;
@@ -38,6 +39,15 @@ export const saveFlags = (): void => {
 	const flagsToSave: string = JSON.stringify(_flags);
 	localStorage.setItem("flags", flagsToSave);
 };
+
+export const clearSavefile = () => {
+	localStorage.clear();
+	_inventory = { ...defaultInventory };
+	_flags = { ...defaultFlags };
+
+	simpleAdderLoop();
+	doubleAdderLoop();
+}
 
 export const getName = (): string => {
 	console.log("name:", _inventory.employee);
