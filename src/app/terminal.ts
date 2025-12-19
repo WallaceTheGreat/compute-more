@@ -1,6 +1,6 @@
 import { increment } from '../lib/computeLab.ts';
 import { getName, saveInventory, setName, saveFlags } from '../lib/savefile.ts';
-import { addDoubleAdder, addSimpleAdder } from '../lib/computeLoops.ts';
+import { addDoubleAdder, addSimpleAdder } from '../lib/computeEconomy.ts';
 import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
 import reservedNames from '../data/reserved_names.json';

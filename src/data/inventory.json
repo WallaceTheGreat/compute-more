@@ -2,5 +2,6 @@
 	"employee": "employeeunknown",
 	"total": 0,
 	"simple_adder": 0,
-	"double_adder": 0
+	"double_adder": 0,
+	"cache": 0
 }

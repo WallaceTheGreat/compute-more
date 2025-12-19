@@ -11,6 +11,18 @@ export const increment = (amount: number = 1): void => {
 	listeners.forEach(cb => cb(getTotal().toString()));
 }
 
+export const substract = (amount: number): boolean => {
+	const currentTotal: number = getTotal();
+	const substractedTotal: number = currentTotal - amount;
+
+	if (substractedTotal < 0)
+		return false;
+
+	setTotal(substractedTotal);
+
+	return true;
+}
+
 export const onChange = (cb: Listener): any => {
 	listeners.add(cb);
 	return () => listeners.delete(cb);

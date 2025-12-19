@@ -2,11 +2,22 @@
 	{
 		"name": "simple_adder",
 		"description": "Increments 1 to the Compute Score every second",
-		"base": 1000
+		"base": 1000,
+		"quota_index": 1,
+		"price": 1000
 	},
 	{
 		"name": "double_adder",
 		"description": "Increments 2 to the Compute Score every second",
-		"base": 1000
+		"base": 1000,
+		"quota_index": 2,
+		"price": 2000
+	},
+	{
+		"name": "cache",
+		"description": "Stores compute score in parallel to the global Compute Score, and dumps everything into the Compute Score once it's full",
+		"base": 1000,
+		"quota_index": 3,
+		"price": 20000
 	}
 ]

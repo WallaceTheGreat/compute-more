@@ -1,59 +1,53 @@
 import { increment } from "./computeLab.ts";
-import { getSimpleAdders, getDoubleAdders, setSimpleAdders, setDoubleAdders } from './savefile.ts';
+import { getSimpleAdders, getDoubleAdders } from './savefile.ts';
 
 let _simpleAdderInterval: number | null = null;
-let _simpleAdders: number = 0;
-
 let _doubleAdderInterval: number | null = null;
-let _doubleAdders: number = 0;
 
 const _SIMPLE_ADDER_BASE: number = 1000;
 const _DOUBLE_ADDER_BASE: number = 1000;
 
-export const initAdders = (): void => {
-	_simpleAdders = getSimpleAdders() ?? 0;
-	_doubleAdders = getDoubleAdders() ?? 0;
-}
-
 export const simpleAdderLoop = (): void => {
+	const simpleAdderCount: number = getSimpleAdders();
+
+	console.log("simpleAdder", simpleAdderCount);
+
 	if (_simpleAdderInterval) {
 		clearInterval(_simpleAdderInterval);
 		_simpleAdderInterval = null;
 	}
 
-	if (_simpleAdders <= 0) return;
+	if (simpleAdderCount <= 0) return;
 
-	const delay: number = _SIMPLE_ADDER_BASE / _simpleAdders;
+	const delay: number = _SIMPLE_ADDER_BASE / simpleAdderCount;
+
+	console.log("simpleAdder delay", delay);
 
 	_simpleAdderInterval = setInterval(() => {
+		console.log("looping", delay, simpleAdderCount);
 		increment();
 	}, delay);
 };
 
 export const doubleAdderLoop = (): void => {
+	const doubleAdderCount: number = getDoubleAdders();
+
+	console.log("doubleAdder", doubleAdderCount);
+
 	if (_doubleAdderInterval) {
 		clearInterval(_doubleAdderInterval);
 		_doubleAdderInterval = null;
 	}
 
-	if (_doubleAdders <= 0) return;
+	if (doubleAdderCount <= 0) return;
 
-	const delay: number = _DOUBLE_ADDER_BASE / _doubleAdders;
+	const delay: number = _DOUBLE_ADDER_BASE / doubleAdderCount;
+
+	console.log("doubleAdder delay", delay);
 
 	_doubleAdderInterval = setInterval(() => {
-		console.log("looping");
+		console.log("looping", delay, doubleAdderCount);
 		increment(2);
 	}, delay);
 };
 
-export const addSimpleAdder = (count: number = 1): void => {
-	_simpleAdders += count;
-	setSimpleAdders(_simpleAdders);
-	simpleAdderLoop();
-};
-
-export const addDoubleAdder = (count: number = 1): void => {
-	_doubleAdders += count;
-	setDoubleAdders(_doubleAdders);
-	doubleAdderLoop();
-};

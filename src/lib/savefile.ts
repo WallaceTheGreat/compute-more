@@ -64,10 +64,10 @@ export const getTotal = (): number => { return _inventory.total; }
 
 export const setTotal = (newTotal: number): void => { _inventory.total = newTotal; }
 
-export const getSimpleAdders = (): number => { return _inventory.simple_adder; }
+export const getSimpleAdders = (): number => { return _inventory.simple_adder ?? 0; }
 
 export const setSimpleAdders = (newCount: number): void => { _inventory.simple_adder = newCount; }
 
-export const getDoubleAdders = (): number => { return _inventory.double_adder; }
+export const getDoubleAdders = (): number => { return _inventory.double_adder ?? 0; }
 
 export const setDoubleAdders = (newCount: number): void => { _inventory.double_adder = newCount; }

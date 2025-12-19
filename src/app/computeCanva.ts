@@ -1,6 +1,7 @@
 import { onChange } from '../lib/computeLab.ts';
 import { getTotal } from '../lib/savefile.ts';
-import { doubleAdderLoop, simpleAdderLoop, initAdders } from '../lib/computeLoops.ts';
+import { doubleAdderLoop, simpleAdderLoop } from '../lib/computeLoops.ts';
+import { initAdders } from '../lib/computeEconomy.ts';
 
 export const initComputeCanva = (): void => {
 	const h1 = document.getElementById('compute-total');

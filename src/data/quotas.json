@@ -1,0 +1,17 @@
+[
+	{
+		"index": 1,
+		"quota": 100,
+		"reached": false
+	},
+	{
+		"index": 2,
+		"quota": 5000,
+		"reached": false
+	},
+	{
+		"index": 3,
+		"quota": 20000,
+		"reached": false
+	}
+]
