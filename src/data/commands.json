@@ -26,5 +26,13 @@
 	{
 		"name": "reset",
 		"description": "Resets the save file"
+	},
+	{
+		"name": "risk",
+		"description": "Take a risk"
+	},
+	{
+		"name": "stats",
+		"description": "See stats"
 	}
 ]
