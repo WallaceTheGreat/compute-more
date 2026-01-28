@@ -99,8 +99,40 @@ export const initTerminal = (): void => {
 				}
 
 				const name: string = args[0];
+				const DEFAULT_MSG = `Greetings, employee ${name}`;
+				let output: string = "";
+
+				const reservedEntry = reservedNames
+					.find(entry => entry.name.toLowerCase() === args[0].toLowerCase()
+					);
+
+				if (reservedEntry) {
+					const { allow, hide_default, hide_employee, custom_message } = reservedEntry;
+
+					if (!allow) {
+						return {
+							output: [custom_message],
+							clear: false
+						}
+					}
+
+					if (!hide_default) {
+						const label = hide_employee ? name : `employee ${name}`;
+						output = `Greetings, ${label}.`;
+					}
+
+					if (custom_message?.trim()) {
+						output = output ? `${output} ${custom_message}` : custom_message;
+					}
+
+					if (!output) {
+						output = DEFAULT_MSG;
+					}
+				} else {
+					output = DEFAULT_MSG;
+				}
+
 				const isSet: boolean = setName(name);
-				let output: string = `Greetings, employee ${name}.`;
 
 				if (!isSet) {
 					const foundName = getName();
@@ -119,40 +151,6 @@ export const initTerminal = (): void => {
 				}
 
 				updatePrompt();
-
-				const reservedEntry = reservedNames
-					.find(entry => entry.name.toLowerCase() === args[0].toLowerCase()
-					);
-
-				if (!reservedEntry) {
-					return {
-						output: [output],
-						clear: false
-					}
-				}
-
-				output = "";
-				const { allow, hide_default, hide_employee, custom_message } = reservedEntry;
-
-				if (!allow) {
-					return {
-						output: [custom_message],
-						clear: false
-					}
-				}
-
-				if (!hide_default) {
-					const label = hide_employee ? name : `employee ${name}`;
-					output = `Greetings, ${label}.`;
-				}
-
-				if (custom_message?.trim()) {
-					output = output ? `${output} ${custom_message}` : custom_message;
-				}
-
-				if (!output) {
-					output = `Greetings, employee ${name}.`;
-				}
 
 				return { output: [output], clear: false };
 			}
