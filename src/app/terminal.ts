@@ -98,38 +98,60 @@ export const initTerminal = (): void => {
 					return { output: ['No name was entered'], clear: false };
 				}
 
-				const reservedEntry = reservedNames
-					.find(entry => entry.name.toLowerCase() === args[0].toLowerCase()
-					);
-
-				let output: string = `Greetings, employee ${args[0]}`;
-				if (reservedEntry) {
-					const customMessage = reservedEntry.custom_message;
-
-					if (!reservedEntry.allow) {
-						return { output: [customMessage], clear: false };
-					}
-
-					if (reservedEntry.hide_employee) {
-						output = `Greetings, ${args[0]}`;
-					}
-					if (reservedEntry.hide_default) {
-						output = customMessage;
-					}
-				}
-
-				const isSet: boolean = setName(args[0]);
-				updatePrompt();
+				const name: string = args[0];
+				const isSet: boolean = setName(name);
+				let output: string = `Greetings, employee ${name}.`;
 
 				if (!isSet) {
 					const foundName = getName();
 					const reservedFoundName = reservedNames
 						.find(entry => entry.name.toLowerCase() === foundName.toLowerCase()
 						);
-					const employeeLabel: string = reservedFoundName?.hide_employee ? `${foundName}` : `employee ${foundName}`;
-					output = `You've already told us your name, ${employeeLabel}`;
 
-					return { output: [output], clear: false };
+					const employeeLabel: string = reservedFoundName?.hide_employee
+						? `${foundName}`
+						: `employee ${foundName}`;
+
+					return {
+						output: [`You've already told us your name, ${employeeLabel}.`],
+						clear: false
+					};
+				}
+
+				updatePrompt();
+
+				const reservedEntry = reservedNames
+					.find(entry => entry.name.toLowerCase() === args[0].toLowerCase()
+					);
+
+				if (!reservedEntry) {
+					return {
+						output: [output],
+						clear: false
+					}
+				}
+
+				output = "";
+				const { allow, hide_default, hide_employee, custom_message } = reservedEntry;
+
+				if (!allow) {
+					return {
+						output: [custom_message],
+						clear: false
+					}
+				}
+
+				if (!hide_default) {
+					const label = hide_employee ? name : `employee ${name}`;
+					output = `Greetings, ${label}.`;
+				}
+
+				if (custom_message?.trim()) {
+					output = output ? `${output} ${custom_message}` : custom_message;
+				}
+
+				if (!output) {
+					output = `Greetings, employee ${name}.`;
 				}
 
 				return { output: [output], clear: false };
