@@ -26,5 +26,12 @@
 		"hide_employee": true,
 		"hide_default": true,
 		"custom_message": "You haven't entered your name, please enter your name"
+	},
+	{
+		"name": "Lumi",
+		"allow": true,
+		"hide_employee": true,
+		"hide_default": false,
+		"custom_message": "It's always night in here!"
 	}
 ]
