@@ -1,9 +1,10 @@
-import { CommandResult } from '../lib/types/command.ts';
+import { CommandResult } from './types/command.ts';
 import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
 import reservedNames from '../data/reserved_names.json';
-import { getName, saveInventory, setName, saveFlags, clearSavefile } from '../lib/savefile.ts';
-import { addDoubleAdder, addSimpleAdder } from '../lib/computeEconomy.ts';
+import { getName, saveInventory, setName, saveFlags, clearSavefile } from './savefile.ts';
+import { addDoubleAdder, addSimpleAdder } from './computeEconomy.ts';
+import { EVENTS } from './core/events.ts';
 
 const handleAddCmd = (adderName: string, count: number): void => {
 	switch (adderName) {
@@ -117,6 +118,10 @@ export const handleCmd = (cmdText: string): CommandResult => {
 					clear: false
 				};
 			}
+
+			document.dispatchEvent(
+				new CustomEvent(EVENTS.UPDATE_PROMPT, { detail: { name } })
+			);
 
 			return { output: [output], clear: false };
 		}

@@ -1,6 +1,7 @@
 import { increment } from '../lib/computeLab.ts';
 import { getName } from '../lib/savefile.ts';
 import { handleCmd } from '../lib/computeCommands.ts';
+import { EVENTS } from '../lib/core/events.ts';
 
 let _spaceKeyDown = false;
 
@@ -94,5 +95,9 @@ export const initTerminal = (): void => {
 		if (e.key === ' ') {
 			_spaceKeyDown = false;
 		}
+	});
+
+	document.addEventListener(EVENTS.UPDATE_PROMPT, () => {
+		updatePrompt();
 	});
 };
