@@ -6,11 +6,16 @@ import { getName, saveInventory, setName, saveFlags, clearSavefile } from './sav
 import { addComputeUnit, isComputeUnitType, ComputeUnitError } from './computeEconomy.ts';
 import { EVENTS, myDispatchEvent } from './core/events.ts';
 
+export const cmdOut = (output: string | string[], clear: boolean = false) => ({
+	output: Array.isArray(output) ? output : [output],
+	clear
+});
+
 export const handleCmd = (cmdText: string): CommandResult => {
 	const [cmd, ...args] = cmdText.trim().split(' ');
 	const command = commands.find(c => c.name === cmd);
 
-	if (!command) return { output: [`Unknown command: ${cmdText}`] };
+	if (!command) return cmdOut(`Unknown command: ${cmdText}`);
 
 	switch (command.name) {
 		case 'help': {
