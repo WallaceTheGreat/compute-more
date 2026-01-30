@@ -3,19 +3,8 @@ import commands from '../data/commands.json';
 import computeUnits from '../data/computeUnits.json';
 import reservedNames from '../data/reserved_names.json';
 import { getName, saveInventory, setName, saveFlags, clearSavefile } from './savefile.ts';
-import { addDoubleAdder, addSimpleAdder } from './computeEconomy.ts';
+import { addComputeUnit, isComputeUnitType, ComputeUnitError } from './computeEconomy.ts';
 import { EVENTS, myDispatchEvent } from './core/events.ts';
-
-const handleAddCmd = (adderName: string, count: number): void => {
-	switch (adderName) {
-		case 'simple_adder':
-			addSimpleAdder(count);
-			break;
-		case 'double_adder':
-			addDoubleAdder(count);
-			break;
-	}
-};
 
 export const handleCmd = (cmdText: string): CommandResult => {
 	const [cmd, ...args] = cmdText.trim().split(' ');
@@ -40,7 +29,10 @@ export const handleCmd = (cmdText: string): CommandResult => {
 			return { output: ['Who are you running from ?'], clear: true };
 		}
 		case 'add': {
-			if (!args[0] || args[0] === "help") {
+			const unitName = args[0];
+			const unitCount = args[1] ? Number(args[1]) : 1;
+
+			if (!unitName || unitName === "help") {
 				return {
 					output: [
 						`Compute units available:`,
@@ -50,17 +42,43 @@ export const handleCmd = (cmdText: string): CommandResult => {
 				};
 			}
 
-			const adder = computeUnits.find(unit => args.includes(unit.name));
-			if (!adder) {
-				return { output: [`Nothing called "${args}"`], clear: false };
+			if (!Number.isInteger(unitCount) || unitCount <= 0) {
+				return {
+					output: [`Invalid count "${unitCount}"`],
+					clear: false
+				};
 			}
 
-			let count = 1;
-			if (args[1]) count = parseInt(args[1]);
+			const result = isComputeUnitType(unitName)
+				? addComputeUnit(unitName, unitCount)
+				: ComputeUnitError.NOT_FOUND;
 
-			handleAddCmd(adder.name, count);
+			switch (result) {
+				case ComputeUnitError.OK:
+					myDispatchEvent(EVENTS.UPDATE_COUNT);
+					return {
+						output: [`Added "${unitName}" x${unitCount}`],
+						clear: false
+					};
 
-			return { output: [`Added "${adder.name}" x${count}`], clear: false };
+				case ComputeUnitError.NOT_AFFORDABLE:
+					return {
+						output: [`Not enough resources to add "${unitName}" x${unitCount}`],
+						clear: false
+					};
+
+				case ComputeUnitError.NOT_FOUND:
+					return {
+						output: [`Nothing called "${unitName}"`],
+						clear: false
+					};
+
+				default:
+					return {
+						output: [`Unknown error while adding "${unitName}"`],
+						clear: false
+					};
+			}
 		}
 		case 'name': {
 			if (!args[0]) {
