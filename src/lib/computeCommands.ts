@@ -4,7 +4,7 @@ import computeUnits from '../data/computeUnits.json';
 import reservedNames from '../data/reserved_names.json';
 import { getName, saveInventory, setName, saveFlags, clearSavefile } from './savefile.ts';
 import { addDoubleAdder, addSimpleAdder } from './computeEconomy.ts';
-import { EVENTS } from './core/events.ts';
+import { EVENTS, myDispatchEvent } from './core/events.ts';
 
 const handleAddCmd = (adderName: string, count: number): void => {
 	switch (adderName) {
@@ -119,9 +119,7 @@ export const handleCmd = (cmdText: string): CommandResult => {
 				};
 			}
 
-			document.dispatchEvent(
-				new CustomEvent(EVENTS.UPDATE_PROMPT, { detail: { name } })
-			);
+			myDispatchEvent(EVENTS.UPDATE_PROMPT, { name });
 
 			return { output: [output], clear: false };
 		}
@@ -132,6 +130,10 @@ export const handleCmd = (cmdText: string): CommandResult => {
 		}
 		case 'reset': {
 			clearSavefile();
+
+			myDispatchEvent(EVENTS.UPDATE_PROMPT);
+			myDispatchEvent(EVENTS.UPDATE_COUNT);
+
 			return { output: ['Save file cleared'], clear: true };
 		}
 		default: {
